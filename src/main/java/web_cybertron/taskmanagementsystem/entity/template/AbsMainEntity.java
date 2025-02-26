@@ -5,7 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import web_cybertron.taskmanagementsystem.entity.User;
+import web_cybertron.taskmanagementsystem.entity.Users;
 
 import java.sql.Timestamp;
 
@@ -23,8 +23,8 @@ public abstract class AbsMainEntity {
 
     @JoinColumn(updatable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private User createdBy;
+    private Users createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User updatedBy;
+    private Users updatedBy;
 }

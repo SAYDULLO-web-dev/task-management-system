@@ -21,7 +21,7 @@ public class CategoryUser extends AbsUUIDEntity {
 
     @ManyToOne
     @Column(nullable = false)
-    private User userId;
+    private Users userId;
 
     @Enumerated
     @Column(nullable = false)

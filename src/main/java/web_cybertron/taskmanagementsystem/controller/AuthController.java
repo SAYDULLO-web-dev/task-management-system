@@ -20,9 +20,15 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-    @PostMapping
+    @PostMapping("/register")
     public HttpEntity<?> registerUser(@Valid @RequestBody RegisterDto registerDto) {
         ApiResponse apiResponse = authService.registerUser(registerDto);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
+//    @PostMapping("/login")
+//    public HttpEntity<?> loginUser(@Valid @RequestBody RegisterDto registerDto) {
+//        ApiResponse apiResponse = authService.registerUser(registerDto);
+//        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+//    }
 }

@@ -23,5 +23,5 @@ public class TaskUser{
 
     @ManyToOne
     @Column(nullable = false)
-    private User userId;
+    private Users userId;
 }

@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 @Configuration
-@ConfigurationProperties
+@ConfigurationProperties(prefix = "task.email.sender")
 public class EmailConfig {
 
     private static final int GMAIL_SMTP_PORT = 587;

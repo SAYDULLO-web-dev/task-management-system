@@ -24,5 +24,5 @@ public class CheckListItem extends AbsUUIDEntity {
     private boolean resolved;
 
     @Column(nullable = false)
-    private List<User> assignedUsers;
+    private List<Users> assignedUsers;
 }

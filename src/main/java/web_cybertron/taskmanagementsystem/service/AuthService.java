@@ -1,16 +1,18 @@
 package web_cybertron.taskmanagementsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import web_cybertron.taskmanagementsystem.entity.User;
+import web_cybertron.taskmanagementsystem.entity.Users;
 import web_cybertron.taskmanagementsystem.entity.enums.SystemRoleName;
 import web_cybertron.taskmanagementsystem.payload.ApiResponse;
 import web_cybertron.taskmanagementsystem.payload.RegisterDto;
-import web_cybertron.taskmanagementsystem.repository.UserRepository;
+import web_cybertron.taskmanagementsystem.repository.UserRepo;
 
 import java.util.Random;
 
@@ -18,10 +20,13 @@ import java.util.Random;
 public class AuthService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    UserRepo userRepo;
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    JavaMailSender javaMailSender;
 
     //todo write code in method
     @Override
@@ -30,19 +35,29 @@ public class AuthService implements UserDetailsService {
     }
 
     public ApiResponse registerUser(RegisterDto registerDto) {
-        if (userRepository.existsByEmail(registerDto.getEmail())) {
+        if (userRepo.existsByEmail(registerDto.getEmail())) {
             return new ApiResponse("This user is already registered by entered email.", false);
         }
-        User user = new User(
+        Users user = new Users(
                 registerDto.getFullName(),
                 registerDto.getEmail(),
                 passwordEncoder.encode(registerDto.getPassword()),
                 SystemRoleName.SYSTEM_ROLE_USER
         );
-        int confirmationCode = new Random().nextInt(6);
-        user.setEmailCode(String.valueOf(confirmationCode));
-        userRepository.save(user);
-        new EmailService().sendConfirmationEmail(user.getEmailCode(), user.getEmail());
-        return new ApiResponse("User registered successfully", true);
+        int confirmationCode = new Random().nextInt(9999);
+        user.setEmailCode(String.valueOf(confirmationCode).substring(0, 4));
+        userRepo.save(user);
+        sendConfirmationEmail(user.getEmailCode(), user.getEmail());
+        return new ApiResponse("Users registered successfully", true);
+    }
+
+    public Boolean sendConfirmationEmail(String emailCode, String email) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Confirmation code");
+        mailMessage.setText("Your confirmation code is: " + emailCode);
+        mailMessage.setFrom("no_reply_task-system-management.org");
+        javaMailSender.send(mailMessage);
+        return true;
     }
 }

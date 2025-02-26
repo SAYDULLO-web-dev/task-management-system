@@ -34,7 +34,7 @@ public class Space extends AbsUUIDEntity {
 
     @ManyToOne
     @Column(nullable = false)
-    private User ownerId;
+    private Users ownerId;
 
     @Column(nullable = false)
     private String accessType;

@@ -19,12 +19,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "users")
-public class User extends AbsUUIDEntity implements UserDetails {
+public class Users extends AbsUUIDEntity {
 
     private String fullName;
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(unique = true, nullable = false)
+    private String username;
 
     private String password;
 
@@ -33,56 +36,39 @@ public class User extends AbsUUIDEntity implements UserDetails {
     private String initialLetter;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Attachment avatar;
-
-    private boolean enabled;
-
-    private boolean accountNonExpired;
-
-    private boolean credentialsNonExpired;
-
-    private boolean accountNonLocked;
+    private Attachment avatarId;
 
     @Enumerated(value = EnumType.STRING)
     private SystemRoleName systemRoleName;
 
     private String emailCode;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(this.systemRoleName.name());
-        return List.of(simpleGrantedAuthority);
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return this.accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
-
-    public User(String fullName, String email, String password, SystemRoleName systemRoleName) {
+    public Users(String fullName, String email, String password, SystemRoleName systemRoleName) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.systemRoleName = systemRoleName;
+    }
+
+    public Users(String fullName, String email, String username, String password, SystemRoleName systemRoleName) {
+        this.fullName = fullName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.systemRoleName = systemRoleName;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", color='" + color + '\'' +
+                ", initialLetter='" + initialLetter + '\'' +
+                ", avatarId=" + avatarId +
+                ", systemRoleName=" + systemRoleName +
+                ", emailCode='" + emailCode + '\'' +
+                '}';
     }
 }

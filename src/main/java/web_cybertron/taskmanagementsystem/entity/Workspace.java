@@ -20,7 +20,7 @@ public class Workspace extends AbsLongEntity {
     private String color;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private User ownerId;
+    private Users ownerId;
 
     @Column(nullable = false)
     private String initialLetter;

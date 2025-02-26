@@ -23,7 +23,7 @@ public class WorkspaceUser extends AbsUUIDEntity {
     private Workspace workspace;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private User user;
+    private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private WorkspaceRole workspaceRole;
