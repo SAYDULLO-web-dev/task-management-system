@@ -1,5 +1,6 @@
 package web_cybertron.taskmanagementsystem.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import web_cybertron.taskmanagementsystem.payload.ApiResponse;
 import web_cybertron.taskmanagementsystem.payload.RegisterDto;
 import web_cybertron.taskmanagementsystem.service.AuthService;
-
-import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/api/auth")
@@ -26,9 +25,5 @@ public class AuthController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-//    @PostMapping("/login")
-//    public HttpEntity<?> loginUser(@Valid @RequestBody RegisterDto registerDto) {
-//        ApiResponse apiResponse = authService.registerUser(registerDto);
-//        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
-//    }
+
 }

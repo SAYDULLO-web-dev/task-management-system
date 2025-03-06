@@ -1,18 +1,19 @@
 package web_cybertron.taskmanagementsystem.payload;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import javax.validation.constraints.NotNull;
 
 @Data
 public class RegisterDto {
 
-    @NotNull
+    @NotNull(message = "Full name is required")
     private String fullName;
 
-    @NotNull
+    @NotNull(message = "Username is required")
+    @Email(message = "Please provide a valid email address")
     private String email;
 
-    @NotNull
+    @NotNull(message = "Password is required")
     private String password;
 }

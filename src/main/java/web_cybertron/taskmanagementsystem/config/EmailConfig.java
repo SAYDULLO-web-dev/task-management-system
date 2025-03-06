@@ -1,6 +1,6 @@
 package web_cybertron.taskmanagementsystem.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,22 +9,16 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
+@Data
 @Configuration
 @ConfigurationProperties(prefix = "task.email.sender")
 public class EmailConfig {
 
     private static final int GMAIL_SMTP_PORT = 587;
 
-    @Value("${task.email.sender.host}")
     private String host;
-
-    @Value("${task.email.sender.user}")
     private String user;
-
-    @Value("${task.email.sender.password}")
     private String password;
-
-    @Value("${task.email.sender.debug}")
     private Boolean debug;
 
     @Bean
@@ -42,7 +36,14 @@ public class EmailConfig {
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", debug);
+
+        // Debug check
+        if (debug != null) {
+            props.put("mail.debug", debug.toString());
+        } else {
+            System.out.println("Debug info is not available.");
+        }
+
         return mailSender;
     }
 }

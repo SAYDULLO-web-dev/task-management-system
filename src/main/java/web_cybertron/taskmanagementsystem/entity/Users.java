@@ -5,14 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import web_cybertron.taskmanagementsystem.entity.enums.SystemRoleName;
 import web_cybertron.taskmanagementsystem.entity.template.AbsUUIDEntity;
-
-import java.util.Collection;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -25,9 +19,6 @@ public class Users extends AbsUUIDEntity {
 
     @Column(unique = true, nullable = false)
     private String email;
-
-    @Column(unique = true, nullable = false)
-    private String username;
 
     private String password;
 
@@ -50,11 +41,11 @@ public class Users extends AbsUUIDEntity {
         this.systemRoleName = systemRoleName;
     }
 
-    public Users(String fullName, String email, String username, String password, SystemRoleName systemRoleName) {
+    public Users(String fullName, String email, String password, String emailCode, SystemRoleName systemRoleName) {
         this.fullName = fullName;
         this.email = email;
-        this.username = username;
         this.password = password;
+        this.emailCode = emailCode;
         this.systemRoleName = systemRoleName;
     }
 
