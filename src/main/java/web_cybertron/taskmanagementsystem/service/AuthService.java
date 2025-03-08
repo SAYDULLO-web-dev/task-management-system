@@ -9,6 +9,7 @@ import web_cybertron.taskmanagementsystem.payload.ApiResponse;
 import web_cybertron.taskmanagementsystem.payload.RegisterDto;
 import web_cybertron.taskmanagementsystem.repository.UserRepo;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -44,5 +45,22 @@ public class AuthService{
         userRepo.save(user);
         emailService.sendConfirmationEmail(user.getEmailCode(), user.getEmail());
         return new ApiResponse("Users registered successfully", true);
+    }
+
+    public ApiResponse verifyEmail(String email, String emailCode) {
+        Optional<Users> user = userRepo.findByEmail(email);
+        if (user.isPresent()) {
+            Users users = user.get();
+            if (users.getEmailCode().equals(emailCode)) {
+                users.setEnabled(true);
+                users.setEmailCode(null);
+                userRepo.save(users);
+                return new ApiResponse("Email verified successfully", true);
+            }
+            return new ApiResponse("Email code is incorrect", false);
+        }
+
+        return null;
+
     }
 }

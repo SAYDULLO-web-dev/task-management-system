@@ -9,6 +9,8 @@ import web_cybertron.taskmanagementsystem.entity.Users;
 import web_cybertron.taskmanagementsystem.entity.principals.UserPrincipal;
 import web_cybertron.taskmanagementsystem.repository.UserRepo;
 
+import java.util.Optional;
+
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -18,13 +20,13 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Users user = userRepo.findByEmail(email);
+        Optional<Users> user = userRepo.findByEmail(email);
 
-        if (user == null) {
-            System.out.println("User Not Found");
-            throw new UsernameNotFoundException("User Not Found");
+        if (user.isPresent()) {
+            return new UserPrincipal(user.orElse(null));
         }
+        System.out.println("User Not Found");
+        throw new UsernameNotFoundException("User Not Found");
 
-        return new UserPrincipal(user);
     }
 }
