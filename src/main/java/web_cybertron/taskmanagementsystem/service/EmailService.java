@@ -8,37 +8,37 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import web_cybertron.taskmanagementsystem.config.EmailConfig;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class EmailService {
+
+    private final EmailConfig emailConfig;
+    private final JavaMailSender javaMailSender;
 
     private final static String EMAIL_CONFIRMATION_SUBJECT = "Confirm your Task Management System platform account";
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
-    private final JavaMailSender javaMailSender;
-
-    public void sendConfirmationEmail(String token, String email) {
-        // Build email content
-        String confirmationMessage = "Welcome to Task Management System, test token: " + token;
-        String from ="no_reply@task-system-management.org"; // Correct email format
-        send(email, from, confirmationMessage);
+    public void sendConfirmationEmail(String confirmationCode, String emailTo) {
+        String confirmationMessage = "Welcome to Task Management System, your confirmation code is: " + confirmationCode;
+        send(emailTo, emailConfig.getUser(), confirmationMessage);
     }
 
     @Async
-    public void send(String to, String from, String email) {
+    public void send(String emailTo, String emailFrom, String confirmationMessage) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-            helper.setFrom(from);
-            helper.setTo(to);
+            helper.setFrom(emailFrom);
+            helper.setTo(emailTo);
             helper.setSubject(EMAIL_CONFIRMATION_SUBJECT);
-            helper.setText(email);
+            helper.setText(confirmationMessage);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            logger.error("Failed to send email to: " + to + " with message: " + email, e);
-            throw new IllegalStateException("Failed to send email to: " + to, e);
+            logger.error("Failed to send email to: {} from: {}", emailTo, emailFrom, e);
+            throw new IllegalStateException("Failed to send email to: " + emailTo, e);
         }
     }
 }

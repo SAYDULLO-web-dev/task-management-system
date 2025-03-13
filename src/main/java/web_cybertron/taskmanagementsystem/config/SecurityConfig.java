@@ -24,7 +24,7 @@ import web_cybertron.taskmanagementsystem.service.MyUserDetailsService;
 public class SecurityConfig {
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private MyUserDetailsService myUserDetailsService;
 
     @Autowired
     private JwtFilter jwtFilter;
@@ -61,7 +61,7 @@ public class SecurityConfig {
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setPasswordEncoder(new BCryptPasswordEncoder(12));
-        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setUserDetailsService(myUserDetailsService);
         return authProvider;
     }
 

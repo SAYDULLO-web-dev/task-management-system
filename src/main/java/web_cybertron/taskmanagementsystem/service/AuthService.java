@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
-public class AuthService{
+public class AuthService {
 
     @Autowired
     UserRepo userRepo;
@@ -23,12 +23,6 @@ public class AuthService{
 
     @Autowired
     EmailService emailService;
-
-//    //todo write code in method
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        return null;
-//    }
 
     public ApiResponse registerUser(RegisterDto registerDto) {
         if (userRepo.existsByEmail(registerDto.getEmail())) {
@@ -40,10 +34,14 @@ public class AuthService{
                 passwordEncoder.encode(registerDto.getPassword()),
                 SystemRoleName.SYSTEM_ROLE_USER
         );
-        int confirmationCode = new Random().nextInt(9999);
-        user.setEmailCode(String.valueOf(confirmationCode).substring(0, 4));
+        int confirmationCode = 1000 + new Random().nextInt(9000);
+        user.setEmailCode(String.valueOf(confirmationCode));
         userRepo.save(user);
-        emailService.sendConfirmationEmail(user.getEmailCode(), user.getEmail());
+        try {
+            emailService.sendConfirmationEmail(user.getEmailCode(), user.getEmail());
+        } catch (Exception e) {
+            System.out.println("Error occurred at sending email: " + e.getMessage());
+        }
         return new ApiResponse("Users registered successfully", true);
     }
 
@@ -55,12 +53,10 @@ public class AuthService{
                 users.setEnabled(true);
                 users.setEmailCode(null);
                 userRepo.save(users);
-                return new ApiResponse("Email verified successfully", true);
+                return new ApiResponse("Account verified successfully", true);
             }
-            return new ApiResponse("Email code is incorrect", false);
+            return new ApiResponse("Verify code is incorrect", false);
         }
-
-        return null;
-
+        return new ApiResponse("No such email (or account) found", false);
     }
 }
