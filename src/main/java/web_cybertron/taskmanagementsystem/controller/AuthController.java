@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web_cybertron.taskmanagementsystem.entity.Users;
 import web_cybertron.taskmanagementsystem.payload.ApiResponse;
@@ -29,7 +30,10 @@ public class AuthController {
     JWTService jwtService;
 
     @PostMapping("/register")
-    public HttpEntity<?> registerUser(@Valid @RequestBody RegisterDto registerDto) {
+    public HttpEntity<?> registerUser(@Valid @RequestBody RegisterDto registerDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
         ApiResponse apiResponse = authService.registerUser(registerDto);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }

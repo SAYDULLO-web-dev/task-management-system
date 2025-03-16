@@ -12,6 +12,7 @@ import web_cybertron.taskmanagementsystem.entity.template.AbsLongEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "owner_id"})})
 public class Workspace extends AbsLongEntity {
 
     @Column(nullable = false)
@@ -27,4 +28,17 @@ public class Workspace extends AbsLongEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     private Attachment avatar;
+
+    public Workspace(String name, String color, Users ownerId, Attachment avatar) {
+        this.name = name;
+        this.color = color;
+        this.ownerId = ownerId;
+        this.avatar = avatar;
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void setInitialLetter() {
+        this.initialLetter = this.name.substring(0, 1);
+    }
 }

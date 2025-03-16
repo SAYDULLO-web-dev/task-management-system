@@ -1,4 +1,4 @@
-package web_cybertron.taskmanagementsystem.config.filter;
+package web_cybertron.taskmanagementsystem.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

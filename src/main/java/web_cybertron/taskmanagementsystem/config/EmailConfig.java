@@ -35,7 +35,7 @@ public class EmailConfig {
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "false");
+        props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.ssl.enable", "false");
 
         // Debug check
@@ -44,7 +44,10 @@ public class EmailConfig {
         } else {
             System.out.println("Debug info is not available.");
         }
-
+        System.out.println("get user:" +new EmailConfig().getUser());
+        System.out.println("get host:" +new EmailConfig().getHost());
+        System.out.println("get ps:" +new EmailConfig().getPassword());
+        System.out.println("get debug:" +new EmailConfig().getDebug());
         return mailSender;
     }
 }

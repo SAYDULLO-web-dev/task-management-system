@@ -7,7 +7,7 @@ import web_cybertron.taskmanagementsystem.entity.Users;
 import web_cybertron.taskmanagementsystem.entity.enums.SystemRoleName;
 import web_cybertron.taskmanagementsystem.payload.ApiResponse;
 import web_cybertron.taskmanagementsystem.payload.RegisterDto;
-import web_cybertron.taskmanagementsystem.repository.UserRepo;
+import web_cybertron.taskmanagementsystem.repository.UserRepository;
 
 import java.util.Optional;
 import java.util.Random;
@@ -16,7 +16,7 @@ import java.util.Random;
 public class AuthService {
 
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -25,7 +25,7 @@ public class AuthService {
     EmailService emailService;
 
     public ApiResponse registerUser(RegisterDto registerDto) {
-        if (userRepo.existsByEmail(registerDto.getEmail())) {
+        if (userRepository.existsByEmail(registerDto.getEmail())) {
             return new ApiResponse("This user is already registered by entered email.", false);
         }
         Users user = new Users(
@@ -36,7 +36,7 @@ public class AuthService {
         );
         int confirmationCode = 1000 + new Random().nextInt(9000);
         user.setEmailCode(String.valueOf(confirmationCode));
-        userRepo.save(user);
+        userRepository.save(user);
         try {
             emailService.sendConfirmationEmail(user.getEmailCode(), user.getEmail());
         } catch (Exception e) {
@@ -46,13 +46,13 @@ public class AuthService {
     }
 
     public ApiResponse verifyEmail(String email, String emailCode) {
-        Optional<Users> user = userRepo.findByEmail(email);
+        Optional<Users> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             Users users = user.get();
             if (users.getEmailCode().equals(emailCode)) {
                 users.setEnabled(true);
                 users.setEmailCode(null);
-                userRepo.save(users);
+                userRepository.save(users);
                 return new ApiResponse("Account verified successfully", true);
             }
             return new ApiResponse("Verify code is incorrect", false);

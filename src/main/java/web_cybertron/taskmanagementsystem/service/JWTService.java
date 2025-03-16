@@ -16,7 +16,7 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    private String secretKey="mySuperSecretKeyForJwtSigningMustBeLongEnough";
+    private final String secretKey="mySuperSecretKeyForJwtSigningMustBeLongEnough";
 
     // generate JWT token
     public String generateToken(String username) {
