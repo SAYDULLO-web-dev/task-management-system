@@ -1,12 +1,14 @@
 package web_cybertron.taskmanagementsystem.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web_cybertron.taskmanagementsystem.entity.Users;
 import web_cybertron.taskmanagementsystem.payload.ApiResponse;
-import web_cybertron.taskmanagementsystem.payload.WorkspaceDto;
+import web_cybertron.taskmanagementsystem.payload.MemberDTO;
+import web_cybertron.taskmanagementsystem.payload.WorkspaceDTO;
 import web_cybertron.taskmanagementsystem.security.CurrentUser;
 import web_cybertron.taskmanagementsystem.service.WorkspaceService;
 
@@ -20,13 +22,13 @@ public class WorkspaceController {
     WorkspaceService workspaceService;
 
     @PostMapping
-    public HttpEntity<?> addWorkspace(@RequestBody WorkspaceDto workspaceDto, @CurrentUser Users user) {
+    public HttpEntity<?> addWorkspace(@Valid @RequestBody WorkspaceDTO workspaceDto, @CurrentUser Users user) {
         ApiResponse apiResponse = workspaceService.addWorkspace(workspaceDto, user);
         return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 
     @PutMapping("/{id}")
-    public HttpEntity<?> editWorkspace(@PathVariable Long id, @RequestBody WorkspaceDto workspaceDto) {
+    public HttpEntity<?> editWorkspace(@PathVariable Long id, @RequestBody WorkspaceDTO workspaceDto) {
         ApiResponse apiResponse = workspaceService.editWorkspace(id, workspaceDto);
         return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
@@ -40,6 +42,12 @@ public class WorkspaceController {
     @DeleteMapping("/{id}")
     public HttpEntity<?> deleteWorkspace(@PathVariable Long id) {
         ApiResponse apiResponse = workspaceService.deleteWorkspace(id);
+        return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
+    }
+
+    @PostMapping("/addOrEditOrRemoveMember/{id}")
+    public HttpEntity<?> addOrEditOrRemoveMemberToWorkspace(@PathVariable Long id, @RequestBody MemberDTO memberDTO) {
+        ApiResponse apiResponse = workspaceService.addOrEditOrRemoveMemberToWorkspace(id, memberDTO);
         return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 }

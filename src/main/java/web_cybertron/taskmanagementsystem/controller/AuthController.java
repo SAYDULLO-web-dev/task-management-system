@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import web_cybertron.taskmanagementsystem.entity.Users;
 import web_cybertron.taskmanagementsystem.payload.ApiResponse;
 import web_cybertron.taskmanagementsystem.payload.LoginDTO;
-import web_cybertron.taskmanagementsystem.payload.RegisterDto;
+import web_cybertron.taskmanagementsystem.payload.RegisterDTO;
 import web_cybertron.taskmanagementsystem.service.AuthService;
 import web_cybertron.taskmanagementsystem.service.JWTService;
 
@@ -30,7 +30,7 @@ public class AuthController {
     JWTService jwtService;
 
     @PostMapping("/register")
-    public HttpEntity<?> registerUser(@Valid @RequestBody RegisterDto registerDto, BindingResult bindingResult) {
+    public HttpEntity<?> registerUser(@Valid @RequestBody RegisterDTO registerDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }

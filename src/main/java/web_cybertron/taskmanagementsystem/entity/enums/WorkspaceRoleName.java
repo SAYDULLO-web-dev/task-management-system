@@ -1,6 +1,6 @@
 package web_cybertron.taskmanagementsystem.entity.enums;
 
-public enum WorkSpaceRoleName {
+public enum WorkspaceRoleName {
 
     ROLE_OWNER,
     ROLE_ADMIN,

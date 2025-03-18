@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import web_cybertron.taskmanagementsystem.entity.enums.WorkSpaceRoleName;
+import web_cybertron.taskmanagementsystem.entity.enums.WorkspaceRoleName;
 import web_cybertron.taskmanagementsystem.entity.template.AbsUUIDEntity;
 
 @EqualsAndHashCode(callSuper = true)
@@ -22,5 +22,5 @@ public class WorkspaceRole extends AbsUUIDEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private WorkSpaceRoleName extendsRole;
+    private WorkspaceRoleName extendsRole;
 }

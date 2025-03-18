@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import web_cybertron.taskmanagementsystem.entity.Users;
 import web_cybertron.taskmanagementsystem.entity.enums.SystemRoleName;
 import web_cybertron.taskmanagementsystem.payload.ApiResponse;
-import web_cybertron.taskmanagementsystem.payload.RegisterDto;
+import web_cybertron.taskmanagementsystem.payload.RegisterDTO;
 import web_cybertron.taskmanagementsystem.repository.UserRepository;
 
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class AuthService {
     @Autowired
     EmailService emailService;
 
-    public ApiResponse registerUser(RegisterDto registerDto) {
+    public ApiResponse registerUser(RegisterDTO registerDto) {
         if (userRepository.existsByEmail(registerDto.getEmail())) {
             return new ApiResponse("This user is already registered by entered email.", false);
         }

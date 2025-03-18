@@ -18,6 +18,7 @@ public class Workspace extends AbsLongEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String color;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
