@@ -188,6 +188,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                     null  // joining date is null, because member (or guest) is not joined yet
             );
             workspaceUserRepository.save(workspaceUser);
+
+            //TODO: send email to member (or guest) for joining workspace
+
         } else if (memberDTO.getMemberActionType().equals(MemberActionType.EDIT)) {
             // Edit member or guest's role in workspace
             WorkspaceUser workspaceUser = workspaceUserRepository.findByWorkspaceIdAndUserId(id, memberDTO.getId()).orElseGet(WorkspaceUser::new);
@@ -200,5 +203,24 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             return new ApiResponse("Member action type is not valid", false);
         }
         return new ApiResponse("Action (inviting/editing/removing member or guest) finished successfully.", true);
+    }
+
+    /**
+     * Allows a user to join a workspace if they have been invited.
+     *
+     * @param workspaceId the ID of the workspace to join
+     * @param user the user attempting to join the workspace
+     * @return ApiResponse indicating the success or failure of the join operation
+     */
+    @Override
+    public ApiResponse joinToWorkspace(Long workspaceId, Users user) {
+        Optional<WorkspaceUser> optionalWorkspaceUser = workspaceUserRepository.findByWorkspaceIdAndUserId(workspaceId, user.getId());
+        if (optionalWorkspaceUser.isPresent()){
+            WorkspaceUser workspaceUser = optionalWorkspaceUser.get();
+            workspaceUser.setDateJoined(new Timestamp(System.currentTimeMillis()));
+            workspaceUserRepository.save(workspaceUser);
+            return new ApiResponse("You have joined to the workspace", true);
+        }
+        return new ApiResponse("You are not invited to this workspace", false);
     }
 }
